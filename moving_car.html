@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Moving Car Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(to top, #87ceeb, #ffffff);
+            font-family: sans-serif;
+        }
+
+        .road {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            background: #333;
+            overflow: hidden;
+            z-index: 1; /* Set road to a lower layer */
+        }
+
+        .road::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 200%;
+            height: 10px;
+            background: repeating-linear-gradient(
+                to right,
+                #fff 0,
+                #fff 40px,
+                transparent 40px,
+                transparent 80px
+            );
+            animation: roadMove 2s linear infinite;
+        }
+
+        @keyframes roadMove {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-80px);
+            }
+        }
+
+        .car {
+            position: absolute;
+            bottom: 20px;
+            width: 200px;
+            animation: moveCar 5s linear infinite;
+            z-index: 2; /* Set car to a higher layer than the road */
+        }
+
+        @keyframes moveCar {
+            0% {
+                left: -220px;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .clouds {
+            position: absolute;
+            top: 20px;
+            width: 200%;
+            height: 100px;
+            background: url('buildings.jpg') repeat-x;
+            animation: cloudMove 60s linear infinite;
+            opacity: 0.5;
+            z-index: 0; /* Set clouds to the background layer */
+        }
+
+        @keyframes cloudMove {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="clouds"></div>
+    <img class="car" src="car4.png" alt="Car Image" />
+    <div class="road"></div>
+</body>
+</html>

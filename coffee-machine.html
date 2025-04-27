@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Coffee Machine</title>
+  <style>
+    body {
+      background: #2b2b2b;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .machine {
+      position: relative;
+      width: 240px;
+      height: 320px;
+      background: linear-gradient(to bottom, #555, #333);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      padding-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .machine-top {
+      width: 100%;
+      height: 40px;
+      background: #111;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .lcd-display {
+      background: #0f0;
+      color: #000;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+      margin: 10px auto 0;
+      width: 80%;
+      height: 30px;
+      border-radius: 5px;
+      padding: 5px;
+      box-shadow: inset 0 0 5px #000;
+    }
+
+    .nozzle {
+      position: absolute;
+      top: 120px;
+      left: 110px;
+      width: 20px;
+      height: 30px;
+      background: #222;
+      border-radius: 10px;
+      z-index: 2;
+    }
+
+    .coffee-flow {
+      position: absolute;
+      top: 150px;
+      left: 118px;
+      width: 4px;
+      height: 0;
+      background: #6f4e37;
+      transition: height 2s linear;
+      z-index: 1;
+    }
+
+    .cup {
+      position: absolute;
+      bottom: 10px;
+      left: 85px;
+      width: 70px;
+      height: 80px;
+      background: #fff;
+      border-radius: 0 0 20px 20px;
+      border: 3px solid #aaa;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .coffee {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 0;
+      background: #6f4e37;
+      transition: height 2s linear;
+    }
+
+    .steam {
+      position: absolute;
+      bottom: 60px;
+      width: 10px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.5);
+      animation: steamRise 2s infinite ease-in-out;
+      opacity: 0;
+      border-radius: 50%;
+    }
+
+    #steam1 {
+      left: 20px;
+      animation-delay: 0s;
+    }
+
+    #steam2 {
+      left: 40px;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes steamRise {
+      0% {
+        transform: translateY(0) scaleX(1);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(-40px) scaleX(1.2);
+        opacity: 0;
+      }
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    select, button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      margin: 5px 0;
+    }
+
+    select {
+      background: #eee;
+      color: #333;
+    }
+
+    button {
+      background: #6f4e37;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #5a3e2e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="machine">
+    <div class="machine-top"></div>
+    <div class="lcd-display" id="lcd">Select Coffee</div>
+    <div class="nozzle"></div>
+    <div class="coffee-flow" id="coffeeFlow"></div>
+    <div class="cup">
+      <div class="coffee" id="coffee"></div>
+      <div class="steam" id="steam1"></div>
+      <div class="steam" id="steam2"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <select id="coffeeType">
+      <option value="">-- Choose Coffee --</option>
+      <option value="Espresso">Espresso</option>
+      <option value="Latte">Latte</option>
+      <option value="Cappuccino">Cappuccino</option>
+    </select>
+    <button onclick="startCoffee()">Brew</button>
+  </div>
+
+  <script>
+    function startCoffee() {
+      const type = document.getElementById('coffeeType').value;
+      const coffeeFlow = document.getElementById('coffeeFlow');
+      const coffee = document.getElementById('coffee');
+      const steam1 = document.getElementById('steam1');
+      const steam2 = document.getElementById('steam2');
+      const lcd = document.getElementById('lcd');
+
+      if (!type) {
+        lcd.textContent = "Select coffee first!";
+        return;
+      }
+
+      lcd.textContent = `Brewing ${type}...`;
+
+      // Reset visuals
+      coffeeFlow.style.height = '0';
+      coffee.style.height = '0';
+      steam1.style.opacity = '0';
+      steam2.style.opacity = '0';
+
+      // Start pour
+      setTimeout(() => {
+        coffeeFlow.style.height = '50px';
+      }, 100);
+
+      // End pour, fill cup, show steam
+      setTimeout(() => {
+        coffeeFlow.style.height = '0';
+        coffee.style.height = type === 'Espresso' ? '25px' : type === 'Latte' ? '40px' : '35px';
+        steam1.style.opacity = '1';
+        steam2.style.opacity = '1';
+        lcd.textContent = `${type} Ready! ☕`;
+      }, 2100);
+    }
+  </script>
+
+</body>
+</html>
